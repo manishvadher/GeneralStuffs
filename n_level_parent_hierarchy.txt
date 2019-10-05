@@ -1,0 +1,21 @@
+      DECLARE @tbl AS TABLE
+            (
+              parentID INT ,
+              ChildeID INT
+            );
+        WITH    CT
+                  AS ( SELECT   U_ID ,
+                                ParentID
+                       FROM     Admin_Users
+                       WHERE    U_ID = @userid
+                       UNION ALL
+                       SELECT   T.U_ID ,
+                                T.ParentID
+                       FROM     Admin_Users AS T
+                                JOIN CT ON T.ParentID = CT.U_ID --AND T.ParentID <> NULL
+                     )
+            INSERT  INTO @tbl
+                    ( parentID, ChildeID )
+                    SELECT  @userid ,
+                            CT.U_ID
+                    FROM    CT
