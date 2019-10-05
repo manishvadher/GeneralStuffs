@@ -1,0 +1,45 @@
+----------------------
+This is cursor syntax in sql
+----------------------     
+     
+     
+        DECLARE @srno INT        
+        DECLARE @dt VARCHAR(100)        
+        DECLARE @narration NVARCHAR(MAX)        
+        DECLARE @credit NUMERIC(18, 2)        
+        DECLARE @debit NUMERIC(18, 2)        
+        DECLARE @outstanding NUMERIC(18, 2)        
+                
+                
+               
+                
+        DECLARE insert_cursor CURSOR LOCAL
+        FOR
+            SELECT  srno ,
+                    date ,
+                    narration ,
+                    credit ,
+                    debit ,
+                    outstanding
+            FROM    @tblDetail        
+                
+        OPEN insert_cursor                                            
+        FETCH NEXT FROM insert_cursor INTO @srno, @dt, @narration, @credit,
+            @debit, @outstanding                                         
+        WHILE @@FETCH_STATUS = 0
+            BEGIN             
+                        
+                      
+                SET @lastoutstanding = @lastoutstanding + ( @credit - @debit )        
+                UPDATE  @tblDetail
+                SET     outstanding = @lastoutstanding
+                WHERE   srno = @srno        
+                        
+                        
+                
+                FETCH NEXT FROM insert_cursor INTO @srno, @dt, @narration,
+                    @credit, @debit, @outstanding        
+            END                                          
+                            
+        CLOSE insert_cursor                                            
+        DEALLOCATE insert_cursor
