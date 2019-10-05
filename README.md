@@ -12,3 +12,5 @@ n_level_parent_hierarchy.txt file use to get n level parent hierarchy from child
 
 
 merge_sql_query.txt contains merge query in sql for bulk operation like bulk insert update delete
+
+pagination_sql.txt contains pagination logic without using row number.
