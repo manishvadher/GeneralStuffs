@@ -6,3 +6,6 @@ htmltopdf.txt file is use to generate html to pdf in c# code.
 
 
 cursor_syntax.txt file contains sql cursor query
+
+
+n_level_parent_hierarchy.txt file use to get n level parent hierarchy from child level
