@@ -1,0 +1,10 @@
+Smple pagging logic .. without RowNumber .. ..and with great performance.
+
+
+DECLARE @StartIndex     INT=0
+DECLARE @PageSize INT=20
+
+SELECT * FROM dbo.Stock
+ORDER  BY Stock_ID
+OFFSET @StartIndex ROW
+FETCH NEXT @PageSize ROWS ONLY
