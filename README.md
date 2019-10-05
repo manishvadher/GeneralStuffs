@@ -17,3 +17,5 @@ pagination_sql.txt contains pagination logic without using row number.
 
 
 truncate_non_empty_table.sql contains store procedure to delete non empty table with reference.
+
+dbo.CurrencyFormat.sql contains function to get currency exchange value 
