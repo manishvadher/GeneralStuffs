@@ -1,0 +1,27 @@
+-------------
+Create Jquery Object Using SQL Database Table
+-----------------
+DECLARE @tbl VARCHAR(500) = 'asset'
+
+DECLARE @temtbl AS TABLE(coltext NVARCHAR(max))
+
+INSERT INTO @temtbl
+SELECT TOP 1 'var obj = new Object();
+                if (hdnID != "0" && hdnID != null) {
+                    obj.'+c.name+' = hdnID;
+                }
+                else {
+                    obj.'+c.name+' = 0;
+                }'  AS name
+FROM sys.columns AS c JOIN sys.types AS t ON c.user_type_id=t.user_type_id 
+WHERE OBJECT_NAME(c.OBJECT_ID) =@tbl ORDER BY c.OBJECT_ID
+
+INSERT INTO @temtbl
+SELECT 
+--'obj.'+c.name+' = $("#'+c.name+'").combobox("getValue");'  AS name
+'obj.'+c.name+' = $("#'+c.name+'").val();' AS name
+FROM sys.columns AS c JOIN sys.types AS t ON c.user_type_id=t.user_type_id 
+WHERE OBJECT_NAME(c.OBJECT_ID) =@tbl ORDER BY c.OBJECT_ID
+
+
+SELECT * FROM @temtbl
