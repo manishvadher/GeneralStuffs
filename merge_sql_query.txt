@@ -1,0 +1,42 @@
+MERGE dbo.MFG_Production_Detail Original
+        USING
+            ( SELECT    tSt.* 
+              FROM      @ProductionDetail AS tSt
+            ) Temp
+        ON Original.Production_Detail_ID = Temp.Production_Detail_ID
+        WHEN MATCHED  THEN
+            UPDATE SET
+                    Original.Production_ID = @RetVal ,
+                    Original.Batch_No = Temp.Batch_No ,
+                    Original.Sr_No = Temp.Sr_No ,
+                    Original.Gross_Weight = Temp.Gross_Weight ,
+                    Original.Packet_Weight = Temp.Packet_Weight ,
+                    Original.Net_Weight = Temp.Net_Weight ,
+                    Original.No_Of_Bags = Temp.No_Of_Bags ,
+                    Original.Weight_Per_Bag = Temp.Weight_Per_Bag ,
+                    Original.Bundle_No = Temp.Bundle_No
+        WHEN NOT MATCHED BY TARGET  THEN
+            INSERT (Production_ID ,
+						  Batch_No,
+                          Sr_No ,
+                          Gross_Weight ,
+                          Packet_Weight ,
+                          Net_Weight ,
+                          No_Of_Bags ,
+                          Weight_Per_Bag,
+						  Bundle_No
+			       )
+            VALUES ( @RetVal ,
+                     Temp.Batch_No ,
+                     Temp.Sr_No ,
+                     Temp.Gross_Weight ,
+                     Temp.Packet_Weight ,
+                     Temp.Net_Weight ,
+                     Temp.No_Of_Bags ,
+                     Temp.Weight_Per_Bag ,
+                     Temp.Bundle_No 
+                   )
+        WHEN NOT MATCHED BY SOURCE AND       
+        Original.Production_ID = @RetVal
+             THEN
+            DELETE;
