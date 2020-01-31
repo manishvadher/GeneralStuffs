@@ -1,0 +1,32 @@
+Register_PHP _reg = new Register_PHP();
+                                    _reg.email = Obj.EmailID;
+                                    _reg.password = plainpassword;
+                                    _reg.username = Obj.UserName;
+
+
+                                    var httpWebRequest = (HttpWebRequest)WebRequest.Create("");
+                                    httpWebRequest.ContentType = "application/json";
+                                    httpWebRequest.Method = "POST";
+
+                                    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                                    {
+                                        string json = JsonConvert.SerializeObject(_reg);
+                                        streamWriter.Write(json);
+                                    }
+                                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                                    {
+                                        var result = streamReader.ReadToEnd();
+                                        if (!string.IsNullOrWhiteSpace(result))
+                                        {
+                                            var response = JsonConvert.DeserializeObject<Register_PHP_Response>(result);
+                                            if (response != null)
+                                            {
+                                                if (response.success == true)
+                                                {
+                                                    NewObj.APIToken = response.api_token;
+                                                    context.SaveChanges();
+                                                }
+                                            }
+                                        }
+                                    }
